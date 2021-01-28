@@ -6,7 +6,7 @@
 // register our function to the PHP API
 // so that PHP knows, which functions are in this module
 zend_function_entry toml_php_functions[] = {
-    PHP_FE(toml_php, NULL)
+    PHP_FE(parse_toml, NULL)
     {NULL, NULL, NULL}
 };
 
@@ -30,6 +30,6 @@ ZEND_GET_MODULE(toml_php)
 // Finally, we implement our "Hello World" function
 // this function will be made available to PHP
 // and prints to PHP stdout using printf
-PHP_FUNCTION(toml_php) {
+PHP_FUNCTION(parse_toml) {
     php_printf("Hello World! (from our extension)\n");
 }

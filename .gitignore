@@ -17,5 +17,5 @@
 /configure
 /configure.ac
 /libtool
-/php_toml.la
+/toml.la
 /modules
