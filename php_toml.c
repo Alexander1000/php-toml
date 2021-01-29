@@ -7,6 +7,7 @@
 // so that PHP knows, which functions are in this module
 zend_function_entry toml_php_functions[] = {
     PHP_FE(parse_toml, NULL)
+    PHP_FE(parse_toml_file, NULL)
     {NULL, NULL, NULL}
 };
 
@@ -32,4 +33,8 @@ ZEND_GET_MODULE(toml_php)
 // and prints to PHP stdout using printf
 PHP_FUNCTION(parse_toml) {
     php_printf("Hello World! (from our extension)\n");
+}
+
+PHP_FUNCTION(parse_toml_file) {
+        php_printf("Hello World! (from our extension)\n");
 }

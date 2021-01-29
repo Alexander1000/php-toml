@@ -4,3 +4,4 @@
 
 // then we declare the function to be exported
 PHP_FUNCTION(parse_toml);
+PHP_FUNCTION(parse_toml_file);
