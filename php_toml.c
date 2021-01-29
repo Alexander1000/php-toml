@@ -36,5 +36,5 @@ PHP_FUNCTION(parse_toml) {
 }
 
 PHP_FUNCTION(parse_toml_file) {
-        php_printf("Hello World! (from our extension)\n");
+    php_printf("Hello World! (from our extension)\n");
 }
