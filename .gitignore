@@ -10,6 +10,7 @@
 /run-tests.php
 /config.h
 /config.h.in
+/config.h.in~
 /config.log
 /config.nice
 /config.status

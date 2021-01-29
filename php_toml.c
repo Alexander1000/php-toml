@@ -1,22 +1,19 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // include the PHP API itself
 #include <php.h>
 // then include the header of your extension
 #include "php_toml.h"
-
-// register our function to the PHP API
-// so that PHP knows, which functions are in this module
-zend_function_entry toml_php_functions[] = {
-    PHP_FE(parse_toml, NULL)
-    PHP_FE(parse_toml_file, NULL)
-    {NULL, NULL, NULL}
-};
+#include "php_toml_arginfo.h"
 
 // some pieces of information about our module
-zend_module_entry toml_php_module_entry = {
+zend_module_entry toml_module_entry = {
     STANDARD_MODULE_HEADER,
     PHP_TOML_EXTNAME,
-    toml_php_functions,
-    NULL,
+    ext_functions,
+    PHP_MINIT(toml),
     NULL,
     NULL,
     NULL,
@@ -26,15 +23,27 @@ zend_module_entry toml_php_module_entry = {
 };
 
 // use a macro to output additional C code, to make ext dynamically loadable
-ZEND_GET_MODULE(toml_php)
+ZEND_GET_MODULE(toml)
 
-// Finally, we implement our "Hello World" function
-// this function will be made available to PHP
-// and prints to PHP stdout using printf
-PHP_FUNCTION(parse_toml) {
-    php_printf("Hello World! (from our extension)\n");
+PHP_FUNCTION(parse_toml_file)
+{
+    size_t filename_size;
+    char *filename;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &filename, &filename_size) == FAILURE) {
+        RETURN_THROWS();
+    }
+
+    array_init(return_value);
+
+    php_printf("Hello World! (from our extension): %s\n", filename);
 }
 
-PHP_FUNCTION(parse_toml_file) {
-    php_printf("Hello World! (from our extension)\n");
+PHP_MINIT_FUNCTION(toml)
+{
+    return SUCCESS;
 }
+
+#ifdef __cplusplus
+}
+#endif
