@@ -1,13 +1,13 @@
-// include the PHP API itself
-#include <php.h>
-// then include the header of your extension
-#include "php_toml.h"
-#include "php_toml_arginfo.h"
-
 #include <io-buffer.h>
 
 extern "C"
 {
+    // include the PHP API itself
+    #include <php.h>
+    // then include the header of your extension
+    #include "php_toml.h"
+    #include "php_toml_arginfo.h"
+
     // some pieces of information about our module
     zend_module_entry toml_module_entry = {
         STANDARD_MODULE_HEADER,

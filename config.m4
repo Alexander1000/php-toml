@@ -30,5 +30,5 @@ if test "$PHP_TOML" != "no"; then
     PHP_ADD_LIBRARY(stdc++, "", STD_SHARED_LIBADD)
     # AC_DEFINE(HAVE_IO_BUFFER,1,[ ])
 
-    PHP_NEW_EXTENSION(toml, php_toml.c, $ext_shared)
+    PHP_NEW_EXTENSION(toml, php_toml.cpp, $ext_shared)
 fi
