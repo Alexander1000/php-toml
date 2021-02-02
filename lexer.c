@@ -24,6 +24,7 @@ struct List* parse_tokens(char* file_name)
     do {
         memset(buffer, 0, sizeof(char) * BUFFER_SIZE);
         size = fread(buffer, sizeof(char), BUFFER_SIZE, hFile);
+
         for (int i = 0; i < size; i++) {
             // skip comments
             if (buffer[i] == '#') {
@@ -59,6 +60,7 @@ struct List* parse_tokens(char* file_name)
                 nextElement->prev = curElement;
 
                 curElement = nextElement;
+                continue;
             }
         }
         // php_printf("Content: %s\n", buffer);
