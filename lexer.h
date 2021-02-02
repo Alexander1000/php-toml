@@ -6,6 +6,12 @@ struct Token {
     int type;
 };
 
-struct Token* parse_tokens(char* file_name);
+struct List {
+    void* value;
+    struct List* next;
+    struct List* prev;
+};
+
+struct List* parse_tokens(char* file_name);
 
 #endif
