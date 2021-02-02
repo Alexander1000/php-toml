@@ -13,5 +13,7 @@ struct List {
 };
 
 struct List* parse_tokens(char* file_name);
+int is_word(char symbol);
+int is_digit(char symbol);
 
 #endif
