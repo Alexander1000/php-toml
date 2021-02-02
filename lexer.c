@@ -42,9 +42,12 @@ struct List* parse_tokens(char* file_name)
                 memset(lexeme, 0, sizeof(char) * (i - startPost));
                 memcpy(lexeme, buffer + startPost, sizeof(i - startPost));
 
+                // initialize token
                 struct Token* token = (struct Token*) malloc(sizeof(struct Token));
                 memset(token, 0, sizeof(struct Token));
                 token->data = lexeme;
+
+                // setup token in value of list
                 curElement->value = token;
 
                 // initialize next element
