@@ -83,6 +83,30 @@ struct List* parse_tokens(char* file_name)
                 curElement = nextElement;
                 continue;
             }
+            if (buffer[i] == '[' || buffer[i] == ']') {
+                // initialize token
+                struct Token* token = (struct Token*) malloc(sizeof(struct Token));
+                memset(token, 0, sizeof(struct Token));
+                if (buffer[i] == '[') {
+                    token->type = T_TOKEN_BRACE_OPEN;
+                } else {
+                    token->type = T_TOKEN_BRACE_CLOSE;
+                }
+
+                // setup token in value of list
+                curElement->value = token;
+
+                // initialize next element
+                struct List* nextElement = (struct List*) malloc(sizeof(struct List));
+                memset(nextElement, 0, sizeof(struct List));
+
+                // make relation
+                curElement->next = nextElement;
+                nextElement->prev = curElement;
+
+                curElement = nextElement;
+                continue;
+            }
         }
         // php_printf("Content: %s\n", buffer);
     } while(size == BUFFER_SIZE);
