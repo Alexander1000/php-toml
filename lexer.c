@@ -21,6 +21,8 @@ struct List* parse_tokens(char* file_name)
     char* buffer = (char*) malloc(sizeof(char) * BUFFER_SIZE);
     size_t size;
 
+    int lexerMode = L_MODE_ROOT;
+
     do {
         memset(buffer, 0, sizeof(char) * BUFFER_SIZE);
         size = fread(buffer, sizeof(char), BUFFER_SIZE, hFile);
@@ -32,81 +34,122 @@ struct List* parse_tokens(char* file_name)
                     i++;
                 } while (buffer[i] != '\n');
             }
-            if (is_word(buffer[i])) {
-                int startPost = i;
-                do {
-                    i++;
-                } while(is_word(buffer[i]) || is_digit(buffer[i]));
 
-                // initialize lexeme
-                char* lexeme = (char*) malloc(sizeof(char) * (i - startPost));
-                memset(lexeme, 0, sizeof(char) * (i - startPost));
-                memcpy(lexeme, buffer + startPost, sizeof(i - startPost));
+            switch (lexerMode) {
+                case L_MODE_ROOT: {
+                    if (is_word(buffer[i])) {
+                        int startPost = i;
+                        do {
+                            i++;
+                        } while(is_word(buffer[i]) || is_digit(buffer[i]));
 
-                // initialize token
-                struct Token* token = (struct Token*) malloc(sizeof(struct Token));
-                memset(token, 0, sizeof(struct Token));
-                token->data = lexeme;
-                token->type = T_TOKEN_PARAMETER_NAME;
+                        // initialize lexeme
+                        char* lexeme = (char*) malloc(sizeof(char) * (i - startPost));
+                        memset(lexeme, 0, sizeof(char) * (i - startPost));
+                        memcpy(lexeme, buffer + startPost, sizeof(i - startPost));
 
-                // setup token in value of list
-                curElement->value = token;
+                        // initialize token
+                        struct Token* token = (struct Token*) malloc(sizeof(struct Token));
+                        memset(token, 0, sizeof(struct Token));
+                        token->data = lexeme;
+                        token->type = T_TOKEN_PARAMETER_NAME;
 
-                // initialize next element
-                struct List* nextElement = (struct List*) malloc(sizeof(struct List));
-                memset(nextElement, 0, sizeof(struct List));
+                        // setup token in value of list
+                        curElement->value = token;
 
-                // make relation
-                curElement->next = nextElement;
-                nextElement->prev = curElement;
+                        // initialize next element
+                        struct List* nextElement = (struct List*) malloc(sizeof(struct List));
+                        memset(nextElement, 0, sizeof(struct List));
 
-                curElement = nextElement;
-                continue;
-            }
-            if (buffer[i] == '=') {
-                // initialize token
-                struct Token* token = (struct Token*) malloc(sizeof(struct Token));
-                memset(token, 0, sizeof(struct Token));
-                token->type = T_TOKEN_EQUAL;
+                        // make relation
+                        curElement->next = nextElement;
+                        nextElement->prev = curElement;
 
-                // setup token in value of list
-                curElement->value = token;
+                        curElement = nextElement;
+                        continue;
+                    }
+                    if (buffer[i] == '=') {
+                        // initialize token
+                        struct Token* token = (struct Token*) malloc(sizeof(struct Token));
+                        memset(token, 0, sizeof(struct Token));
+                        token->type = T_TOKEN_EQUAL;
 
-                // initialize next element
-                struct List* nextElement = (struct List*) malloc(sizeof(struct List));
-                memset(nextElement, 0, sizeof(struct List));
+                        // setup token in value of list
+                        curElement->value = token;
 
-                // make relation
-                curElement->next = nextElement;
-                nextElement->prev = curElement;
+                        // initialize next element
+                        struct List* nextElement = (struct List*) malloc(sizeof(struct List));
+                        memset(nextElement, 0, sizeof(struct List));
 
-                curElement = nextElement;
-                continue;
-            }
-            if (buffer[i] == '[' || buffer[i] == ']') {
-                // initialize token
-                struct Token* token = (struct Token*) malloc(sizeof(struct Token));
-                memset(token, 0, sizeof(struct Token));
-                if (buffer[i] == '[') {
-                    token->type = T_TOKEN_BRACE_OPEN;
-                } else {
-                    token->type = T_TOKEN_BRACE_CLOSE;
+                        // make relation
+                        curElement->next = nextElement;
+                        nextElement->prev = curElement;
+
+                        curElement = nextElement;
+
+                        lexerMode = L_MODE_SCAN_VALUE;
+                        continue;
+                    }
+                    if (buffer[i] == '[' || buffer[i] == ']') {
+                        // initialize token
+                        struct Token* token = (struct Token*) malloc(sizeof(struct Token));
+                        memset(token, 0, sizeof(struct Token));
+                        if (buffer[i] == '[') {
+                            token->type = T_TOKEN_BRACE_OPEN;
+                        } else {
+                            token->type = T_TOKEN_BRACE_CLOSE;
+                        }
+
+                        // setup token in value of list
+                        curElement->value = token;
+
+                        // initialize next element
+                        struct List* nextElement = (struct List*) malloc(sizeof(struct List));
+                        memset(nextElement, 0, sizeof(struct List));
+
+                        // make relation
+                        curElement->next = nextElement;
+                        nextElement->prev = curElement;
+
+                        curElement = nextElement;
+                        continue;
+                    }
+                    break;
                 }
+                case L_MODE_SCAN_VALUE: {
+                    int startPost = i;
+                    do {
+                        i++;
+                    } while(buffer[i] != 0x0A && buffer[i] != 0x0D);
 
-                // setup token in value of list
-                curElement->value = token;
+                    // initialize lexeme
+                    char* lexeme = (char*) malloc(sizeof(char) * (i - startPost));
+                    memset(lexeme, 0, sizeof(char) * (i - startPost));
+                    memcpy(lexeme, buffer + startPost, sizeof(i - startPost));
 
-                // initialize next element
-                struct List* nextElement = (struct List*) malloc(sizeof(struct List));
-                memset(nextElement, 0, sizeof(struct List));
+                    // initialize token
+                    struct Token* token = (struct Token*) malloc(sizeof(struct Token));
+                    memset(token, 0, sizeof(struct Token));
+                    token->data = lexeme;
+                    token->type = T_TOKEN_PARAMETER_VALUE;
 
-                // make relation
-                curElement->next = nextElement;
-                nextElement->prev = curElement;
+                    // setup token in value of list
+                    curElement->value = token;
 
-                curElement = nextElement;
-                continue;
-            }
+                    // initialize next element
+                    struct List* nextElement = (struct List*) malloc(sizeof(struct List));
+                    memset(nextElement, 0, sizeof(struct List));
+
+                    // make relation
+                    curElement->next = nextElement;
+                    nextElement->prev = curElement;
+
+                    curElement = nextElement;
+
+                    lexerMode = L_MODE_ROOT;
+                    break;
+                }
+            };
         }
         // php_printf("Content: %s\n", buffer);
     } while(size == BUFFER_SIZE);
