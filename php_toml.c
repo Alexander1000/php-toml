@@ -39,6 +39,9 @@ PHP_FUNCTION(parse_toml_file)
     while (curToken != 0 && curToken->value != 0) {
         struct Token* token = curToken->value;
         php_printf("Token: %d\n", token->type);
+        if (token->data != 0) {
+            php_printf("Value: %s\n", token->data);
+        }
         curToken = curToken->next;
     }
 
