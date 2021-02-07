@@ -35,6 +35,12 @@ PHP_FUNCTION(parse_toml_file)
     array_init(return_value);
 
     struct List* tokens = parse_tokens(filename);
+    struct List* curToken = tokens;
+    while (curToken != 0 && curToken->value != 0) {
+        struct Token* token = curToken->value;
+        php_printf("Token: %d\n", token->type);
+        curToken = curToken->next;
+    }
 
     php_printf("Hello World! (from our extension): %s\n", filename);
 }
