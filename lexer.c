@@ -45,8 +45,8 @@ struct List* parse_tokens(char* file_name)
 
                         // initialize lexeme
                         char* lexeme = (char*) malloc(sizeof(char) * (i - startPost));
-                        memset(lexeme, 0, sizeof(char) * (i - startPost));
-                        memcpy(lexeme, buffer + startPost, sizeof(i - startPost));
+                        memset(lexeme, 0, sizeof(char) * (i - startPost + 1));
+                        memcpy(lexeme, buffer + startPost, sizeof(char) * (i - startPost));
 
                         // initialize token
                         struct Token* token = (struct Token*) malloc(sizeof(struct Token));
