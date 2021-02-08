@@ -38,6 +38,36 @@ PHP_FUNCTION(parse_toml_file)
     struct List* curToken = tokens;
     while (curToken != 0 && curToken->value != 0) {
         struct Token* token = curToken->value;
+        if (token == 0) {
+            continue;
+        }
+
+        if (token->type == T_TOKEN_PARAMETER_NAME) {
+            char* paramName = token->data;
+            curToken = curToken->next;
+            if (curToken == 0) {
+                continue;
+            }
+            token = (struct Token*) curToken->value;
+            if (token == 0) {
+                continue;
+            }
+            if (token->type != T_TOKEN_EQUAL) {
+                zend_error(E_WARNING, "Invalid toml-format");
+            }
+            curToken = curToken->next;
+            if (curToken == 0) {
+                continue;
+            }
+            token = (struct Token*) curToken->value;
+            if (token == 0) {
+                continue;
+            }
+            if (token->type == T_TOKEN_PARAMETER_VALUE) {
+                add_assoc_str(return_value, paramName, zend_string_dup(token->data, 0));
+            }
+        }
+
         php_printf("Token: %d\n", token->type);
         if (token->data != 0) {
             php_printf("Value: %s\n", token->data);
