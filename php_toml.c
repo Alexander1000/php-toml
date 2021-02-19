@@ -64,7 +64,7 @@ PHP_FUNCTION(parse_toml_file)
                 continue;
             }
             if (token->type == T_TOKEN_PARAMETER_VALUE) {
-                add_assoc_str(return_value, paramName, zend_string_dup(token->data, 0));
+                add_assoc_string(return_value, paramName, token->data);
             }
         }
 
