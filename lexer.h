@@ -5,12 +5,16 @@
 #define T_TOKEN_EQUAL 2
 #define T_TOKEN_PLAIN_VALUE 3
 #define T_TOKEN_BRACE_OPEN 4
-#define T_TOKEN_BRACE_CLOSE 4
-#define T_TOKEN_PARAMETER_VALUE 5
+#define T_TOKEN_BRACE_CLOSE 5
+#define T_TOKEN_PARAMETER_VALUE 6
 
 // lexer mode
 #define L_MODE_ROOT 0
 #define L_MODE_SCAN_VALUE 1
+
+// syntax mode
+#define S_PLAIN_MODE 0
+#define S_OBJECT_MODE 1
 
 struct Token {
     char* data;

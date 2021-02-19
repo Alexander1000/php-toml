@@ -36,35 +36,57 @@ PHP_FUNCTION(parse_toml_file)
 
     struct List* tokens = parse_tokens(filename);
     struct List* curToken = tokens;
+
+    int mode = S_PLAIN_MODE;
+
     while (curToken != 0 && curToken->value != 0) {
         struct Token* token = curToken->value;
         if (token == 0) {
             continue;
         }
 
-        if (token->type == T_TOKEN_PARAMETER_NAME) {
-            char* paramName = token->data;
-            curToken = curToken->next;
-            if (curToken == 0) {
-                continue;
+        switch (mode) {
+            case S_PLAIN_MODE: {
+                if (token->type == T_TOKEN_BRACE_OPEN) {
+                    mode = S_OBJECT_MODE;
+                    break;
+                }
+
+                if (token->type == T_TOKEN_PARAMETER_NAME) {
+                    char *paramName = token->data;
+                    curToken = curToken->next;
+                    if (curToken == 0) {
+                        continue;
+                    }
+                    token = (struct Token *) curToken->value;
+                    if (token == 0) {
+                        continue;
+                    }
+                    if (token->type != T_TOKEN_EQUAL) {
+                        zend_error(E_WARNING, "Invalid toml-format");
+                    }
+                    curToken = curToken->next;
+                    if (curToken == 0) {
+                        continue;
+                    }
+                    token = (struct Token *) curToken->value;
+                    if (token == 0) {
+                        continue;
+                    }
+                    if (token->type == T_TOKEN_PARAMETER_VALUE) {
+                        add_assoc_string(return_value, paramName, token->data);
+                    }
+                }
+
+                break;
             }
-            token = (struct Token*) curToken->value;
-            if (token == 0) {
-                continue;
-            }
-            if (token->type != T_TOKEN_EQUAL) {
-                zend_error(E_WARNING, "Invalid toml-format");
-            }
-            curToken = curToken->next;
-            if (curToken == 0) {
-                continue;
-            }
-            token = (struct Token*) curToken->value;
-            if (token == 0) {
-                continue;
-            }
-            if (token->type == T_TOKEN_PARAMETER_VALUE) {
-                add_assoc_string(return_value, paramName, token->data);
+
+            case S_OBJECT_MODE: {
+                if (token->type == T_TOKEN_BRACE_CLOSE) {
+                    mode = S_PLAIN_MODE;
+                    break;
+                }
+                break;
             }
         }
 
@@ -72,6 +94,7 @@ PHP_FUNCTION(parse_toml_file)
         if (token->data != 0) {
             php_printf("Value: %s\n", token->data);
         }
+
         curToken = curToken->next;
     }
 
