@@ -174,6 +174,7 @@ PHP_FUNCTION(parse_toml_file)
                     zval* array = parse_array(&curToken);
                     add_assoc_zval(return_value, paramName, array);
                     // curToken = curToken->prev;
+                    // @todo: make array[]
                     mode = S_PLAIN_MODE;
                 }
                 break;
