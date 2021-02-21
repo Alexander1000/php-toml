@@ -5,6 +5,7 @@
 #include "php_toml_arginfo.h"
 
 #include "lexer.h"
+#include "parse_tokens.h"
 
 // some pieces of information about our module
 zend_module_entry toml_module_entry = {
@@ -114,10 +115,11 @@ PHP_FUNCTION(parse_toml_file)
                     }
 
                     curToken = curToken->next;
+
+                    zval* array = parse_array(curToken);
+                    add_assoc_zval(return_value, paramName, array);
                 }
 
-                zval array;
-                array_init(&array);
                 break;
             }
         }
