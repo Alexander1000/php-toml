@@ -110,8 +110,13 @@ PHP_FUNCTION(parse_toml_file)
                         zend_error(E_WARNING, "Invalid toml-format");
                     }
 
+                    token = (struct Token *) curToken->value;
+                    if (token == 0) {
+                        zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
+                    }
+
                     if (token->type != T_TOKEN_BRACE_CLOSE) {
-                        zend_error(E_WARNING, "Invalid toml-format");
+                        zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
                     }
 
                     curToken = curToken->next;
