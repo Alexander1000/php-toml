@@ -7,8 +7,6 @@ zval* parse_array(struct List* curToken)
     zval* return_value = (zval*) malloc(sizeof(zval));
     array_init(return_value);
 
-    int mode = S_PLAIN_MODE;
-
     while (curToken != 0 && curToken->value != 0) {
         struct Token* token = curToken->value;
         if (token == 0) {

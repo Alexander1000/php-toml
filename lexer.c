@@ -42,6 +42,7 @@ struct List* parse_tokens(char* file_name)
                         do {
                             i++;
                         } while(is_word(buffer[i]) || is_digit(buffer[i]));
+                        i--;
 
                         // initialize lexeme
                         char* lexeme = (char*) malloc(sizeof(char) * (i - startPost));
