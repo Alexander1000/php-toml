@@ -4,6 +4,6 @@
 #include <php.h>
 #include "lexer.h"
 
-zval* parse_array(struct List* curToken);
+zval* parse_array(struct List** pCurToken);
 
 #endif

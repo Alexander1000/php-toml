@@ -2,10 +2,12 @@
 #include "lexer.h"
 #include <memory.h>
 
-zval* parse_array(struct List* curToken)
+zval* parse_array(struct List** pCurToken)
 {
     zval* return_value = (zval*) malloc(sizeof(zval));
     array_init(return_value);
+
+    struct List* curToken = *pCurToken;
 
     while (curToken != 0 && curToken->value != 0) {
         struct Token* token = curToken->value;
@@ -47,5 +49,6 @@ zval* parse_array(struct List* curToken)
         curToken = curToken->next;
     }
 
+    *pCurToken = curToken->prev;
     return return_value;
 }
