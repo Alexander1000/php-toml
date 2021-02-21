@@ -140,6 +140,42 @@ PHP_FUNCTION(parse_toml_file)
             }
 
             case S_ARRAY_MODE: {
+                if (token->type == T_TOKEN_PARAMETER_NAME) {
+                    char *paramName = token->data;
+                    curToken = curToken->next;
+                    if (curToken == 0) {
+                        zend_error(E_WARNING, "Invalid toml-format");
+                    }
+
+                    token = (struct Token *) curToken->value;
+                    if (token == 0) {
+                        zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
+                    }
+
+                    if (token->type != T_TOKEN_BRACE_CLOSE) {
+                        zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
+                    }
+
+                    curToken = curToken->next;
+
+                    if (curToken == 0) {
+                        zend_error(E_WARNING, "Invalid toml-format");
+                    }
+
+                    token = (struct Token *) curToken->value;
+                    if (token == 0) {
+                        zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
+                    }
+
+                    if (token->type != T_TOKEN_BRACE_CLOSE) {
+                        zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
+                    }
+
+                    zval* array = parse_array(&curToken);
+                    add_assoc_zval(return_value, paramName, array);
+                    // curToken = curToken->prev;
+                    mode = S_PLAIN_MODE;
+                }
                 break;
             }
         }
