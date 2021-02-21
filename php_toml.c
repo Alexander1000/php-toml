@@ -37,6 +37,20 @@ PHP_FUNCTION(parse_toml_file)
     struct List* tokens = parse_tokens(filename);
     struct List* curToken = tokens;
 
+    while (curToken != 0 && curToken->value != 0) {
+        struct Token *token = curToken->value;
+        if (token == 0) {
+            continue;
+        }
+        php_printf("Token: %d\n", token->type);
+        if (token->data != 0) {
+            php_printf("Value: %s\n", token->data);
+        }
+        php_printf("=======\n");
+        curToken = curToken->next;
+    }
+
+    curToken = tokens;
     int mode = S_PLAIN_MODE;
 
     while (curToken != 0 && curToken->value != 0) {
@@ -75,6 +89,7 @@ PHP_FUNCTION(parse_toml_file)
                     }
                     if (token->type == T_TOKEN_PARAMETER_VALUE) {
                         add_assoc_string(return_value, paramName, token->data);
+                        php_printf("Setup Key: %s and Value: %s\n", paramName, token->data);
                     }
                 }
 
@@ -86,19 +101,36 @@ PHP_FUNCTION(parse_toml_file)
                     mode = S_PLAIN_MODE;
                     break;
                 }
+
+                if (token->type == T_TOKEN_PARAMETER_NAME) {
+                    char *paramName = token->data;
+                    curToken = curToken->next;
+                    if (curToken == 0) {
+                        zend_error(E_WARNING, "Invalid toml-format");
+                    }
+
+                    if (token->type != T_TOKEN_BRACE_CLOSE) {
+                        zend_error(E_WARNING, "Invalid toml-format");
+                    }
+
+                    curToken = curToken->next;
+                }
+
+                zval array;
+                array_init(&months);
                 break;
             }
         }
 
-        php_printf("Token: %d\n", token->type);
-        if (token->data != 0) {
-            php_printf("Value: %s\n", token->data);
-        }
+//        php_printf("Token: %d\n", token->type);
+//        if (token->data != 0) {
+//            php_printf("Value: %s\n", token->data);
+//        }
 
         curToken = curToken->next;
     }
 
-    php_printf("Hello World! (from our extension): %s\n", filename);
+    // php_printf("Hello World! (from our extension): %s\n", filename);
 }
 
 PHP_MINIT_FUNCTION(toml)
