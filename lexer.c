@@ -44,7 +44,7 @@ struct List* parse_tokens(char* file_name)
                         } while(is_word(buffer[i]) || is_digit(buffer[i]));
 
                         // initialize lexeme
-                        char* lexeme = (char*) malloc(sizeof(char) * (i - startPost));
+                        char* lexeme = (char*) malloc(sizeof(char) * (i - startPost + 1));
                         memset(lexeme, 0, sizeof(char) * (i - startPost + 1));
                         memcpy(lexeme, buffer + startPost, sizeof(char) * (i - startPost));
 
@@ -66,6 +66,7 @@ struct List* parse_tokens(char* file_name)
                         nextElement->prev = curElement;
 
                         curElement = nextElement;
+                        i--;
                         continue;
                     }
                     if (buffer[i] == '=') {
