@@ -117,7 +117,7 @@ PHP_FUNCTION(parse_toml_file)
                 }
 
                 zval array;
-                array_init(&months);
+                array_init(&array);
                 break;
             }
         }
