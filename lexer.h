@@ -15,6 +15,7 @@
 // syntax mode
 #define S_PLAIN_MODE 0
 #define S_OBJECT_MODE 1
+#define S_ARRAY_MODE 2
 
 struct Token {
     char* data;

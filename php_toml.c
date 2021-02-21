@@ -63,6 +63,15 @@ PHP_FUNCTION(parse_toml_file)
         switch (mode) {
             case S_PLAIN_MODE: {
                 if (token->type == T_TOKEN_BRACE_OPEN) {
+                    struct List* forwardToken = curToken->next;
+                    if (forwardToken != 0) {
+                        struct Token* forwardToken = (struct Token*) forwardToken->data;
+                        if (forwardToken != 0) {
+                            if (forwardToken->type == T_TOKEN_BRACE_OPEN) {
+                                mode = S_ARRAY_MODE;
+                            }
+                        }
+                    }
                     mode = S_OBJECT_MODE;
                     break;
                 }
@@ -127,6 +136,10 @@ PHP_FUNCTION(parse_toml_file)
                     mode = S_PLAIN_MODE;
                 }
 
+                break;
+            }
+
+            case S_ARRAY_MODE: {
                 break;
             }
         }
