@@ -63,12 +63,13 @@ PHP_FUNCTION(parse_toml_file)
         switch (mode) {
             case S_PLAIN_MODE: {
                 if (token->type == T_TOKEN_BRACE_OPEN) {
-                    struct List* forwardToken = curToken->next;
-                    if (forwardToken != 0) {
-                        struct Token* forwardToken = (struct Token*) forwardToken->data;
+                    struct List* forwardElement = curToken->next;
+                    if (forwardElement != 0) {
+                        struct Token* forwardToken = (struct Token*) forwardElement->value;
                         if (forwardToken != 0) {
                             if (forwardToken->type == T_TOKEN_BRACE_OPEN) {
                                 mode = S_ARRAY_MODE;
+                                break;
                             }
                         }
                     }
@@ -169,6 +170,17 @@ PHP_FUNCTION(parse_toml_file)
 
                     if (token->type != T_TOKEN_BRACE_CLOSE) {
                         zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
+                    }
+
+                    HashTable* ftable = HASH_OF(return_value);
+                    zend_string* sParamName = zend_string_alloc(strlen(paramName) + 1, 0);
+                    memset(sParamName->val, 0, sizeof(char) * (strlen(paramName) + 1));
+                    memcpy(sParamName->val, paramName, sizeof(char) * strlen(paramName));
+
+                    if (zend_hash_find(ftable, sParamName) == SUCCESS) {
+                        zend_error(E_WARNING, "zend_hash_find (success): %s", sParamName->val);
+                    } else {
+                        zend_error(E_WARNING, "zend_hash_find (fail): %s", sParamName->val);
                     }
 
                     zval* array = parse_array(&curToken);
