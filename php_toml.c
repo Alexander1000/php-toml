@@ -133,7 +133,6 @@ PHP_FUNCTION(parse_toml_file)
 
                     zval* array = parse_array(&curToken);
                     add_assoc_zval(return_value, paramName, array);
-                    // curToken = curToken->prev;
                     mode = S_PLAIN_MODE;
                 }
 
@@ -178,6 +177,7 @@ PHP_FUNCTION(parse_toml_file)
                     zend_string* sParamName = zend_string_alloc(strlen(paramName) + 1, 0);
                     memset(sParamName->val, 0, sizeof(char) * (strlen(paramName) + 1));
                     memcpy(sParamName->val, paramName, sizeof(char) * strlen(paramName));
+                    sParamName->len = strlen(paramName);
 
                     zval* nestedArray = zend_hash_find(ftable, sParamName);
 
@@ -189,25 +189,14 @@ PHP_FUNCTION(parse_toml_file)
 
                     add_next_index_zval(nestedArray, array);
 
-                    // zval* array = parse_array(&curToken);
-                    // add_assoc_zval(return_value, paramName, array);
-                    // curToken = curToken->prev;
-                    // @todo: make array[]
                     mode = S_PLAIN_MODE;
                 }
                 break;
             }
         }
 
-//        php_printf("Token: %d\n", token->type);
-//        if (token->data != 0) {
-//            php_printf("Value: %s\n", token->data);
-//        }
-
         curToken = curToken->next;
     }
-
-    // php_printf("Hello World! (from our extension): %s\n", filename);
 }
 
 PHP_MINIT_FUNCTION(toml)
