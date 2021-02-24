@@ -38,20 +38,20 @@ PHP_FUNCTION(parse_toml_file)
     struct List* tokens = parse_tokens(filename);
     struct List* curToken = tokens;
 
-    while (curToken != 0 && curToken->value != 0) {
-        struct Token *token = curToken->value;
-        if (token == 0) {
-            continue;
-        }
-        php_printf("Token: %d\n", token->type);
-        if (token->data != 0) {
-            php_printf("Value: %s\n", token->data);
-        }
-        php_printf("=======\n");
-        curToken = curToken->next;
-    }
-
-    curToken = tokens;
+//    while (curToken != 0 && curToken->value != 0) {
+//        struct Token *token = curToken->value;
+//        if (token == 0) {
+//            continue;
+//        }
+//        php_printf("Token: %d\n", token->type);
+//        if (token->data != 0) {
+//            php_printf("Value: %s\n", token->data);
+//        }
+//        php_printf("=======\n");
+//        curToken = curToken->next;
+//    }
+//
+//    curToken = tokens;
     int mode = S_PLAIN_MODE;
 
     while (curToken != 0 && curToken->value != 0) {
@@ -100,7 +100,6 @@ PHP_FUNCTION(parse_toml_file)
                     }
                     if (token->type == T_TOKEN_PARAMETER_VALUE) {
                         add_assoc_string(return_value, paramName, token->data);
-                        php_printf("Setup Key: %s and Value: %s\n", paramName, token->data);
                     }
                 }
 
@@ -190,6 +189,8 @@ PHP_FUNCTION(parse_toml_file)
                     add_next_index_zval(nestedArray, array);
 
                     mode = S_PLAIN_MODE;
+
+                    zend_string_release(sParamName);
                 }
                 break;
             }

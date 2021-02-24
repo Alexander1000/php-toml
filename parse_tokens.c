@@ -42,7 +42,6 @@ zval* parse_array(struct List** pCurToken)
             }
             if (token->type == T_TOKEN_PARAMETER_VALUE) {
                 add_assoc_string(return_value, paramName, token->data);
-                php_printf("Setup Key: %s and Value: %s\n", paramName, token->data);
             }
         }
 
