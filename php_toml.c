@@ -172,19 +172,25 @@ PHP_FUNCTION(parse_toml_file)
                         zend_error(E_WARNING, "Invalid toml-format (expected close brace)");
                     }
 
+                    zval* array = parse_array(&curToken);
+
                     HashTable* ftable = HASH_OF(return_value);
                     zend_string* sParamName = zend_string_alloc(strlen(paramName) + 1, 0);
                     memset(sParamName->val, 0, sizeof(char) * (strlen(paramName) + 1));
                     memcpy(sParamName->val, paramName, sizeof(char) * strlen(paramName));
 
-                    if (zend_hash_find(ftable, sParamName) == SUCCESS) {
-                        zend_error(E_WARNING, "zend_hash_find (success): %s", sParamName->val);
-                    } else {
-                        zend_error(E_WARNING, "zend_hash_find (fail): %s", sParamName->val);
+                    zval* nestedArray = zend_hash_find(ftable, sParamName);
+
+                    if (nestedArray == 0) {
+                        nestedArray = (zval*) malloc(sizeof(zval));
+                        array_init(nestedArray);
+                        add_assoc_zval(return_value, paramName, nestedArray);
                     }
 
-                    zval* array = parse_array(&curToken);
-                    add_assoc_zval(return_value, paramName, array);
+                    add_next_index_zval(nestedArray, array);
+
+                    // zval* array = parse_array(&curToken);
+                    // add_assoc_zval(return_value, paramName, array);
                     // curToken = curToken->prev;
                     // @todo: make array[]
                     mode = S_PLAIN_MODE;
