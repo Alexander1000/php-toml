@@ -41,10 +41,10 @@ jobs:
           RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
 
       - name: Build docker
-        run: docker build --no-cache -t php-test .
+        run: docker build --no-cache -t php73-test .
 
       - name: Run tests
-        run: docker run --rm php-test make test
+        run: docker run --rm php73-test make test
 
   php74:
     # The type of runner that the job will run on
@@ -77,10 +77,10 @@ jobs:
           RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
 
       - name: Build docker
-        run: docker build --no-cache -t php-test .
+        run: docker build --no-cache -t php74-test .
 
       - name: Run tests
-        run: docker run --rm php-test make test
+        run: docker run --rm php74-test make test
 
   php80:
     # The type of runner that the job will run on
@@ -113,7 +113,7 @@ jobs:
           RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
 
       - name: Build docker
-        run: docker build --no-cache -t php-test .
+        run: docker build --no-cache -t php80-test .
 
       - name: Run tests
-        run: docker run --rm php-test make test
+        run: docker run --rm php80-test make test
