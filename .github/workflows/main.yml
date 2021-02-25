@@ -20,5 +20,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: make docker image
+        run: |
+          echo "FROM debian:buster-20201012
+          RUN apt-get update && apt-cache policy php && apt-get install -y php" > Dockerfile
+
       - name: Install php
         run: apt-get update && apt-cache policy php && apt-get install -y php && php -v
