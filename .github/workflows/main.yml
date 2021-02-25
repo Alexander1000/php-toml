@@ -10,8 +10,79 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  php73:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Make Dockerfile
+        run: |
+          echo "FROM debian:buster-20210208
+          RUN apt-get update \
+            && apt-get install -y \
+              apt-transport-https \
+              lsb-release \
+              ca-certificates \
+              wget \
+              make \
+            && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
+            && echo \"deb https://packages.sury.org/php/ \$(lsb_release -sc) main\" > /etc/apt/sources.list.d/php.list \
+            && apt-get update \
+            && apt-get install -y php7.3 php7.3-dev
+
+          COPY . /app
+
+          WORKDIR /app
+
+          RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
+
+      - name: Build docker
+        run: docker build --no-cache -t php73-test .
+
+      - name: Run tests
+        run: docker run --rm php73-test make test
+
+  php74:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Make Dockerfile
+        run: |
+          echo "FROM debian:buster-20210208
+          RUN apt-get update \
+            && apt-get install -y \
+              apt-transport-https \
+              lsb-release \
+              ca-certificates \
+              wget \
+              make \
+            && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
+            && echo \"deb https://packages.sury.org/php/ \$(lsb_release -sc) main\" > /etc/apt/sources.list.d/php.list \
+            && apt-get update \
+            && apt-get install -y php7.4 php7.4-dev
+
+          COPY . /app
+
+          WORKDIR /app
+
+          RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
+
+      - name: Build docker
+        run: docker build --no-cache -t php74-test .
+
+      - name: Run tests
+        run: docker run --rm php74-test make test
+
+  php80:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -42,7 +113,7 @@ jobs:
           RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
 
       - name: Build docker
-        run: docker build --no-cache -t php-test .
+        run: docker build --no-cache -t php80-test .
 
       - name: Run tests
-        run: docker run --rm php-test make test
+        run: docker run --rm php80-test make test
