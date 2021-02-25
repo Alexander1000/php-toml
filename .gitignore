@@ -21,3 +21,9 @@
 /toml.la
 /modules
 /php_toml.loT
+/tests/*.diff
+/tests/*.exp
+/tests/*.log
+/tests/*.out
+/tests/*.sh
+/tests/*.php
