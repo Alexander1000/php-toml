@@ -33,12 +33,9 @@ PHP_FUNCTION(parse_toml_file)
         RETURN_THROWS();
     }
 
-    // array_init(return_value);
-
     struct List* tokens = get_tokens(filename);
-    struct List* curToken = tokens;
 
-    // return_value = parse_tokens(&tokens);
+    return_value = parse_tokens(&tokens);
 
 //    while (curToken != 0 && curToken->value != 0) {
 //        struct Token *token = curToken->value;
@@ -54,6 +51,8 @@ PHP_FUNCTION(parse_toml_file)
 //    }
 //
 //    curToken = tokens;
+
+/*
     int mode = S_PLAIN_MODE;
 
     while (curToken != 0 && curToken->value != 0) {
@@ -200,6 +199,7 @@ PHP_FUNCTION(parse_toml_file)
 
         curToken = curToken->next;
     }
+    */
 }
 
 PHP_MINIT_FUNCTION(toml)
