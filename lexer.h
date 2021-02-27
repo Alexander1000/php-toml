@@ -12,11 +12,6 @@
 #define L_MODE_ROOT 0
 #define L_MODE_SCAN_VALUE 1
 
-// syntax mode
-#define S_PLAIN_MODE 0
-#define S_OBJECT_MODE 1
-#define S_ARRAY_MODE 2
-
 struct Token {
     char* data;
     int type;
@@ -28,7 +23,7 @@ struct List {
     struct List* prev;
 };
 
-struct List* parse_tokens(char* file_name);
+struct List* get_tokens(char* file_name);
 int is_word(char symbol);
 int is_digit(char symbol);
 
