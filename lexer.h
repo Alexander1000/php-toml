@@ -12,11 +12,6 @@
 #define L_MODE_ROOT 0
 #define L_MODE_SCAN_VALUE 1
 
-// syntax mode
-// #define S_PLAIN_MODE 0
-// #define S_OBJECT_MODE 1
-// #define S_ARRAY_MODE 2
-
 struct Token {
     char* data;
     int type;
