@@ -5,5 +5,6 @@
 #include "lexer.h"
 
 zval* parse_array(struct List** pCurToken);
+zval* parse_tokens(struct List** pCurToken);
 
 #endif
