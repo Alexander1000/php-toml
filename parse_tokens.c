@@ -103,8 +103,6 @@ zval* parse_tokens(struct List** pCurToken)
 
                     add_next_index_zval(nestedArray, array);
 
-                    mode = S_PLAIN_MODE;
-
                     zend_string_release(sParamName);
                     continue;
                 }
