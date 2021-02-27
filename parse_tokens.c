@@ -112,7 +112,6 @@ zval* parse_tokens(struct List** pCurToken)
         curToken = curToken->next;
     }
 
-    *pCurToken = curToken->prev;
     return return_value;
 }
 
@@ -162,6 +161,6 @@ zval* parse_array(struct List** pCurToken)
         curToken = curToken->next;
     }
 
-    *pCurToken = curToken->prev;
+    *pCurToken = curToken;
     return return_value;
 }
