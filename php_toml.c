@@ -35,7 +35,7 @@ PHP_FUNCTION(parse_toml_file)
 
     struct List* tokens = get_tokens(filename);
 
-    return_value = parse_tokens(&tokens);
+    *return_value = *parse_tokens(&tokens);
 }
 
 PHP_MINIT_FUNCTION(toml)
