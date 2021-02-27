@@ -33,10 +33,12 @@ PHP_FUNCTION(parse_toml_file)
         RETURN_THROWS();
     }
 
-    array_init(return_value);
+    // array_init(return_value);
 
-    struct List* tokens = parse_tokens(filename);
+    struct List* tokens = get_tokens(filename);
     struct List* curToken = tokens;
+
+    // return_value = parse_tokens(&tokens);
 
 //    while (curToken != 0 && curToken->value != 0) {
 //        struct Token *token = curToken->value;

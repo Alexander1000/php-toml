@@ -6,7 +6,7 @@
 
 #define BUFFER_SIZE 4096
 
-struct List* parse_tokens(char* file_name)
+struct List* get_tokens(char* file_name)
 {
     // initialize list tokens
     struct List* list = malloc(sizeof(struct List));

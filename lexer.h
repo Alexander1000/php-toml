@@ -28,7 +28,7 @@ struct List {
     struct List* prev;
 };
 
-struct List* parse_tokens(char* file_name);
+struct List* get_tokens(char* file_name);
 int is_word(char symbol);
 int is_digit(char symbol);
 
