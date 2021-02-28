@@ -1,5 +1,5 @@
 --TEST--
-parse simple toml file
+toml file with complex attribute name
 --FILE--
 <?php
 
@@ -15,6 +15,11 @@ array(3) {
     string(15) ""nested object""
     ["value"]=>
     string(4) "8900"
+    ["item"] =>
+    array(1) {
+        ["name"]=>
+        string()=> "item3"
+    }
   }
   ["blocks"]=>
   array(2) {

@@ -23,7 +23,7 @@ zval* parse_tokens(struct List** pCurToken)
             if (token == 0) {
                 zend_error(E_WARNING, "Invalid toml-format");
             }
-            if (token->type == T_TOKEN_PARAMETER_NAME) {
+            if (token->type == T_TOKEN_PARAMETER_NAME || token->type == T_TOKEN_COMPLEX_PARAMETER_NAME) {
                 char *paramName = token->data;
                 curToken = curToken->next;
                 if (curToken == 0) {
@@ -54,7 +54,7 @@ zval* parse_tokens(struct List** pCurToken)
                 if (token == 0) {
                     zend_error(E_WARNING, "Invalid toml-format");
                 }
-                if (token->type == T_TOKEN_PARAMETER_NAME) {
+                if (token->type == T_TOKEN_PARAMETER_NAME || token->type == T_TOKEN_COMPLEX_PARAMETER_NAME) {
                     char *paramName = token->data;
                     curToken = curToken->next;
                     if (curToken == 0) {
