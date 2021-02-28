@@ -1,0 +1,14 @@
+name = "test toml"
+
+[block]
+name = "nested object"
+value = 8900
+
+[[blocks]]
+name = "item1"
+
+[[blocks]]
+name = "item2"
+
+[block.item]
+name = "item3"
