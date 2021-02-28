@@ -39,9 +39,34 @@ struct List* get_tokens(char* file_name)
                 case L_MODE_ROOT: {
                     if (is_word(buffer[i])) {
                         int startPost = i;
+                        int isComplexName = 0;
+                        int isQuote = 0;
                         do {
                             i++;
-                        } while(is_word(buffer[i]) || is_digit(buffer[i]));
+
+                            if (isQuote == 1) {
+                                if (buffer[i] == '"') {
+                                    isQuote = 0;
+                                }
+                                continue;
+                            }
+
+                            if (is_word(buffer[i]) || is_digit(buffer[i])) {
+                                continue;
+                            }
+
+                            if (buffer[i] == '.') {
+                                isComplexName = 1;
+                                continue;
+                            }
+
+                            if (buffer[i] == '"' && isQuote == 0) {
+                                isQuote = 1;
+                                continue;
+                            }
+
+                            break;
+                        } while(1);
 
                         // initialize lexeme
                         char* lexeme = (char*) malloc(sizeof(char) * (i - startPost + 1));
@@ -52,7 +77,11 @@ struct List* get_tokens(char* file_name)
                         struct Token* token = (struct Token*) malloc(sizeof(struct Token));
                         memset(token, 0, sizeof(struct Token));
                         token->data = lexeme;
-                        token->type = T_TOKEN_PARAMETER_NAME;
+                        if (isComplexName == 0) {
+                            token->type = T_TOKEN_PARAMETER_NAME;
+                        } else {
+                            token->type = T_TOKEN_COMPLEX_PARAMETER_NAME;
+                        }
 
                         // setup token in value of list
                         curElement->value = token;
@@ -157,9 +186,8 @@ struct List* get_tokens(char* file_name)
                     lexerMode = L_MODE_ROOT;
                     break;
                 }
-            };
+            }
         }
-        // php_printf("Content: %s\n", buffer);
     } while(size == BUFFER_SIZE);
 
     // clean up
