@@ -15,10 +15,10 @@ array(3) {
     string(15) ""nested object""
     ["value"]=>
     string(4) "8900"
-    ["item"] =>
+    ["item"]=>
     array(1) {
         ["name"]=>
-        string()=> "item3"
+        string(7)=> ""item3""
     }
   }
   ["blocks"]=>
@@ -32,6 +32,13 @@ array(3) {
     array(1) {
       ["name"]=>
       string(7) ""item2""
+      ["props"]=>
+      array(2) {
+        ["price"]=>
+        string(4) "9090"
+        ["description"]=>
+        string(27) ""some description for item""
+      }
     }
   }
 }
