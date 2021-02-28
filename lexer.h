@@ -27,5 +27,6 @@ struct List {
 struct List* get_tokens(char* file_name);
 int is_word(char symbol);
 int is_digit(char symbol);
+struct List* get_array_path_parts(char* str);
 
 #endif
