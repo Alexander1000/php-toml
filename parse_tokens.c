@@ -165,8 +165,13 @@ zval* parse_array(struct List** pCurToken)
         if (token->type == T_TOKEN_COMPLEX_PARAMETER_NAME) {
             char *paramName = token->data;
 
-            php_printf("complex parameter name");
+            php_printf("complex parameter name: %s\n", paramName);
             struct List* parts = get_array_path_parts(paramName);
+
+            while (parts != 0 && parts->value != 0) {
+                php_printf("Value: %s\n", parts->value);
+                parts = parts->next;
+            }
 
             curToken = curToken->next;
             if (curToken == 0) {

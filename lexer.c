@@ -238,5 +238,23 @@ struct List* get_array_path_parts(char* str)
         i++;
     } while(i != strlen(str));
 
+    if (startPos < i) {
+        int length = i - startPos;
+        char* s = (char*) malloc(sizeof(char) * (length + 1));
+        memset(s, 0, sizeof(length + 1));
+        memcpy(s, str + startPos, sizeof(char) * length);
+        startPos = i + 1;
+        if (curList->value == 0) {
+            curList->value = s;
+        } else {
+            struct List* l = malloc(sizeof(struct List));
+            memset(l, 0, sizeof(struct List));
+            l->value = s;
+            l->prev = curList;
+            curList->next = l;
+            curList = l;
+        }
+    }
+
     return list;
 }
