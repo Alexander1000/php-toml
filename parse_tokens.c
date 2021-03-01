@@ -168,8 +168,29 @@ zval* parse_array(struct List** pCurToken)
             php_printf("complex parameter name: %s\n", paramName);
             struct List* parts = get_array_path_parts(paramName);
 
+            zval* relativeArray = return_value;
+
             while (parts != 0 && parts->value != 0) {
                 php_printf("Value: %s\n", parts->value);
+
+                char* partName = (char*) parts->value;
+                int length = strlen(partName);
+                HashTable* hashTable = HASH_OF(relativeArray);
+                zend_string* sParamName = zend_string_alloc(length + 1, 0);
+                memset(sParamName->val, 0, sizeof(char) * (length + 1));
+                memcpy(sParamName->val, paramName, sizeof(char) * length);
+                sParamName->len = length;
+
+                zval* nestedArray = zend_hash_find(hashTable, sParamName);
+
+                if (nestedArray == 0) {
+                    nestedArray = (zval*) malloc(sizeof(zval));
+                    array_init(nestedArray);
+                    add_assoc_zval(relativeArray, partName, nestedArray);
+                }
+
+                relativeArray = nestedArray;
+
                 parts = parts->next;
             }
 
