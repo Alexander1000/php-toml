@@ -169,27 +169,35 @@ zval* parse_array(struct List** pCurToken)
             struct List* parts = get_array_path_parts(paramName);
 
             zval* relativeArray = return_value;
+            int isLastElement = 0;
 
             while (parts != 0 && parts->value != 0) {
                 php_printf("Value: %s\n", parts->value);
-
-                char* partName = (char*) parts->value;
-                int length = strlen(partName);
-                HashTable* hashTable = HASH_OF(relativeArray);
-                zend_string* sParamName = zend_string_alloc(length + 1, 0);
-                memset(sParamName->val, 0, sizeof(char) * (length + 1));
-                memcpy(sParamName->val, paramName, sizeof(char) * length);
-                sParamName->len = length;
-
-                zval* nestedArray = zend_hash_find(hashTable, sParamName);
-
-                if (nestedArray == 0) {
-                    nestedArray = (zval*) malloc(sizeof(zval));
-                    array_init(nestedArray);
-                    add_assoc_zval(relativeArray, partName, nestedArray);
+                if (parts->next == 0) {
+                    isLastElement = 1;
                 }
 
-                relativeArray = nestedArray;
+                if (isLastElement == 0) {
+                    char *partName = (char *) parts->value;
+                    int length = strlen(partName);
+                    HashTable *hashTable = HASH_OF(relativeArray);
+                    zend_string *sParamName = zend_string_alloc(length + 1, 0);
+                    memset(sParamName->val, 0, sizeof(char) * (length + 1));
+                    memcpy(sParamName->val, paramName, sizeof(char) * length);
+                    sParamName->len = length;
+
+                    zval *nestedArray = zend_hash_find(hashTable, sParamName);
+
+                    if (nestedArray == 0) {
+                        nestedArray = (zval *) malloc(sizeof(zval));
+                        array_init(nestedArray);
+                        add_assoc_zval(relativeArray, partName, nestedArray);
+                    }
+
+                    relativeArray = nestedArray;
+                } else {
+                    paramName = (char*) parts->value;
+                }
 
                 parts = parts->next;
             }
@@ -214,7 +222,7 @@ zval* parse_array(struct List** pCurToken)
                 continue;
             }
             if (token->type == T_TOKEN_PARAMETER_VALUE) {
-                add_assoc_string(return_value, paramName, token->data);
+                add_assoc_string(relativeArray, paramName, token->data);
             }
         }
 
