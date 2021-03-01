@@ -157,7 +157,6 @@ zval* parse_array(struct List** pCurToken)
                 add_assoc_string(return_value, paramName, token->data);
             }
             if (token->type == T_TOKEN_COMPLEX_PARAMETER_NAME) {
-                php_printf("complex parameter name");
                 struct List* parts = get_array_path_parts(paramName);
             }
         }
@@ -165,14 +164,12 @@ zval* parse_array(struct List** pCurToken)
         if (token->type == T_TOKEN_COMPLEX_PARAMETER_NAME) {
             char *paramName = token->data;
 
-            php_printf("complex parameter name: %s\n", paramName);
             struct List* parts = get_array_path_parts(paramName);
 
             zval* relativeArray = return_value;
             int isLastElement = 0;
 
             while (parts != 0 && parts->value != 0) {
-                php_printf("Value: %s\n", parts->value);
                 if (parts->next == 0) {
                     isLastElement = 1;
                 }

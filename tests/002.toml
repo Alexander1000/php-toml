@@ -3,6 +3,7 @@ name = "test toml"
 [block]
 name = "nested object"
 value = 8900
+some.test = true
 
 [[blocks]]
 name = "item1"
@@ -11,6 +12,3 @@ name = "item1"
 name = "item2"
 props.price = 9090
 props.description = "some description for item"
-
-[block.item]
-name = "item3"

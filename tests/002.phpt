@@ -10,15 +10,15 @@ array(3) {
   ["name"]=>
   string(11) ""test toml""
   ["block"]=>
-  array(2) {
+  array(3) {
     ["name"]=>
     string(15) ""nested object""
     ["value"]=>
     string(4) "8900"
-    ["item"]=>
+    ["some"]=>
     array(1) {
-        ["name"]=>
-        string(7)=> ""item3""
+      ["test"]=>
+      string(4) "true"
     }
   }
   ["blocks"]=>
@@ -29,7 +29,7 @@ array(3) {
       string(7) ""item1""
     }
     [1]=>
-    array(1) {
+    array(2) {
       ["name"]=>
       string(7) ""item2""
       ["props"]=>
