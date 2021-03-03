@@ -221,7 +221,7 @@ struct List* get_array_path_parts(char* str)
         if (str[i] == '.') {
             int length = i - startPos;
             char* s = (char*) malloc(sizeof(char) * (length + 1));
-            memset(s, 0, sizeof(length + 1));
+            memset(s, 0, sizeof(char) * (length + 1));
             memcpy(s, str + startPos, sizeof(char) * length);
             startPos = i + 1;
             if (curList->value == 0) {
@@ -241,9 +241,9 @@ struct List* get_array_path_parts(char* str)
     if (startPos < i) {
         int length = i - startPos;
         char* s = (char*) malloc(sizeof(char) * (length + 1));
-        memset(s, 0, sizeof(length + 1));
+        memset(s, 0, sizeof(char) * (length + 1));
         memcpy(s, str + startPos, sizeof(char) * length);
-        startPos = i + 1;
+
         if (curList->value == 0) {
             curList->value = s;
         } else {

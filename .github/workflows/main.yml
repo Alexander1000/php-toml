@@ -38,7 +38,7 @@ jobs:
 
           WORKDIR /app
 
-          RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
+          RUN phpize && ./configure --enable-toml && make" > Dockerfile
 
       - name: Build docker
         run: docker build --no-cache -t php73-test .
@@ -74,7 +74,7 @@ jobs:
 
           WORKDIR /app
 
-          RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
+          RUN phpize && ./configure --enable-toml && make" > Dockerfile
 
       - name: Build docker
         run: docker build --no-cache -t php74-test .
@@ -110,7 +110,7 @@ jobs:
 
           WORKDIR /app
 
-          RUN phpize && ./configure --enable-toml &&  make" > Dockerfile
+          RUN phpize && ./configure --enable-toml && make" > Dockerfile
 
       - name: Build docker
         run: docker build --no-cache -t php80-test .
