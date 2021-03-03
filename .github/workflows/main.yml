@@ -44,7 +44,7 @@ jobs:
         run: docker build --no-cache -t php73-test .
 
       - name: Run tests
-        run: docker run --rm php73-test make test
+        run: docker run --rm php73-test bash -c 'make test || $(php print_failed_tests.php && exit 1)'
 
   php74:
     # The type of runner that the job will run on
@@ -80,7 +80,7 @@ jobs:
         run: docker build --no-cache -t php74-test .
 
       - name: Run tests
-        run: docker run --rm php74-test make test
+        run: docker run --rm php74-test bash -c 'make test || $(php print_failed_tests.php && exit 1)'
 
   php80:
     # The type of runner that the job will run on
@@ -116,4 +116,4 @@ jobs:
         run: docker build --no-cache -t php80-test .
 
       - name: Run tests
-        run: docker run --rm php80-test make test
+        run: docker run --rm php80-test bash -c 'make test || $(php print_failed_tests.php && exit 1)'
