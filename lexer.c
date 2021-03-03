@@ -39,9 +39,34 @@ struct List* get_tokens(char* file_name)
                 case L_MODE_ROOT: {
                     if (is_word(buffer[i])) {
                         int startPost = i;
+                        int isComplexName = 0;
+                        int isQuote = 0;
                         do {
                             i++;
-                        } while(is_word(buffer[i]) || is_digit(buffer[i]));
+
+                            if (isQuote == 1) {
+                                if (buffer[i] == '"') {
+                                    isQuote = 0;
+                                }
+                                continue;
+                            }
+
+                            if (is_word(buffer[i]) || is_digit(buffer[i])) {
+                                continue;
+                            }
+
+                            if (buffer[i] == '.') {
+                                isComplexName = 1;
+                                continue;
+                            }
+
+                            if (buffer[i] == '"' && isQuote == 0) {
+                                isQuote = 1;
+                                continue;
+                            }
+
+                            break;
+                        } while(1);
 
                         // initialize lexeme
                         char* lexeme = (char*) malloc(sizeof(char) * (i - startPost + 1));
@@ -52,7 +77,11 @@ struct List* get_tokens(char* file_name)
                         struct Token* token = (struct Token*) malloc(sizeof(struct Token));
                         memset(token, 0, sizeof(struct Token));
                         token->data = lexeme;
-                        token->type = T_TOKEN_PARAMETER_NAME;
+                        if (isComplexName == 0) {
+                            token->type = T_TOKEN_PARAMETER_NAME;
+                        } else {
+                            token->type = T_TOKEN_COMPLEX_PARAMETER_NAME;
+                        }
 
                         // setup token in value of list
                         curElement->value = token;
@@ -157,9 +186,8 @@ struct List* get_tokens(char* file_name)
                     lexerMode = L_MODE_ROOT;
                     break;
                 }
-            };
+            }
         }
-        // php_printf("Content: %s\n", buffer);
     } while(size == BUFFER_SIZE);
 
     // clean up
@@ -176,4 +204,57 @@ int is_word(char symbol)
 int is_digit(char symbol)
 {
     return symbol >= '0' && symbol <= '9';
+}
+
+struct List* get_array_path_parts(char* str)
+{
+    // initialize list tokens
+    struct List* list = malloc(sizeof(struct List));
+    memset(list, 0, sizeof(struct List));
+
+    struct List* curList = list;
+
+    int i = 0;
+    int startPos = i;
+
+    do {
+        if (str[i] == '.') {
+            int length = i - startPos;
+            char* s = (char*) malloc(sizeof(char) * (length + 1));
+            memset(s, 0, sizeof(char) * (length + 1));
+            memcpy(s, str + startPos, sizeof(char) * length);
+            startPos = i + 1;
+            if (curList->value == 0) {
+                curList->value = s;
+            } else {
+                struct List* l = malloc(sizeof(struct List));
+                memset(l, 0, sizeof(struct List));
+                l->value = s;
+                l->prev = curList;
+                curList->next = l;
+                curList = l;
+            }
+        }
+        i++;
+    } while(i != strlen(str));
+
+    if (startPos < i) {
+        int length = i - startPos;
+        char* s = (char*) malloc(sizeof(char) * (length + 1));
+        memset(s, 0, sizeof(char) * (length + 1));
+        memcpy(s, str + startPos, sizeof(char) * length);
+
+        if (curList->value == 0) {
+            curList->value = s;
+        } else {
+            struct List* l = malloc(sizeof(struct List));
+            memset(l, 0, sizeof(struct List));
+            l->value = s;
+            l->prev = curList;
+            curList->next = l;
+            curList = l;
+        }
+    }
+
+    return list;
 }
