@@ -1,5 +1,5 @@
 --TEST--
-declare nested arrays
+declare nested object
 --FILE--
 <?php
 
