@@ -10,5 +10,12 @@ name = "item1"
 [[blocks]]
 name = "item2"
 
-[block.test]
+[[ block.items ]]
+name = "test01"
+
+[[ block.items ]]
+name = "test02"
+
+[[ block.items ]]
+name = "test03"
 enabled = true
