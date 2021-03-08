@@ -15,7 +15,7 @@ array(3) {
     string(15) ""nested object""
     ["value"]=>
     string(4) "8900"
-    ["item2"]=>
+    ["item"]=>
     array(2) {
       ["name"]=>
       string(8) ""test01""
