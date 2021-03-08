@@ -1,5 +1,5 @@
 --TEST--
-parse simple toml file
+declare nested arrays
 --FILE--
 <?php
 
