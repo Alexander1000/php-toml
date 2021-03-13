@@ -208,36 +208,6 @@ zval* parse_tokens(struct List** pCurToken)
 
                         if (isLastElement == 0) {
                             HashTable *hashTable = HASH_OF(relativeArray);
-
-                            zval *prop;
-                            zend_string *key;
-                            zend_long h;
-
-                            int indexed = -1;
-                            zval* lastElement = 0;
-
-                            ZEND_HASH_FOREACH_KEY_VAL(hashTable, h, key, prop) {
-                                if (key) {
-                                    // key-value array
-                                    indexed = 0;
-                                    php_printf("Element '%s' has key: '%s'\n", parts->value, ZSTR_VAL(key));
-                                } else {
-                                    // indexed array
-                                    if (indexed == -1) {
-                                        indexed = 1;
-                                    }
-
-                                    lastElement = prop;
-                                }
-                            } ZEND_HASH_FOREACH_END();
-
-                            php_printf("Element '%s' is indexed: %d\n", parts->value, indexed);
-
-//                            if (indexed == 1 && lastElement != 0) {
-//                                nestedArray = lastElement;
-//                            }
-
-
                             char *partName = (char *) parts->value;
                             int length = strlen(partName);
                             zend_string *sParamName = zend_string_alloc(length + 1, 0);
@@ -254,9 +224,33 @@ zval* parse_tokens(struct List** pCurToken)
                             }
 
                             // check nested array
-                            // hashTable = HASH_OF(nestedArray);
+                            hashTable = HASH_OF(nestedArray);
 
-                            // todo: check array as list
+                            zval *prop;
+                            zend_string *key;
+                            zend_long h;
+
+                            int indexed = -1;
+                            zval* lastElement = 0;
+
+                            ZEND_HASH_FOREACH_KEY_VAL(hashTable, h, key, prop) {
+                                if (key) {
+                                    // key-value array
+                                    indexed = 0;
+                                } else {
+                                    // indexed array
+                                    if (indexed == -1) {
+                                        indexed = 1;
+                                    }
+
+                                    lastElement = prop;
+                                }
+                            } ZEND_HASH_FOREACH_END();
+
+                            if (indexed == 1 && lastElement != 0) {
+                                nestedArray = lastElement;
+                            }
+
                             relativeArray = nestedArray;
                         } else {
                             paramName = (char*) parts->value;
