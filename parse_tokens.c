@@ -196,6 +196,7 @@ zval* parse_tokens(struct List** pCurToken)
                                 add_assoc_zval(relativeArray, partName, nestedArray);
                             }
 
+                            // todo: check array as list
                             relativeArray = nestedArray;
                         } else {
                             paramName = (char*) parts->value;
