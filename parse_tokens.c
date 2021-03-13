@@ -196,6 +196,35 @@ zval* parse_tokens(struct List** pCurToken)
                                 add_assoc_zval(relativeArray, partName, nestedArray);
                             }
 
+                            // check nested array
+                            hashTable = HASH_OF(nestedArray);
+
+                            zval *prop;
+                            zend_string *key;
+                            zend_long h;
+
+                            int indexed = -1;
+
+                            zval* lastElement = 0;
+
+                            ZEND_HASH_FOREACH_KEY_VAL(hashTable, h, key, prop) {
+                                if (key) {
+                                    // key-value array
+                                    indexed = 0;
+                                } else {
+                                    // indexed array
+                                    if (indexed == -1) {
+                                        indexed = 1;
+                                    }
+
+                                    lastElement = prop;
+                                }
+                            } ZEND_HASH_FOREACH_END();
+
+                            if (indexed == 1 && lastElement != 0) {
+                                nestedArray = lastElement;
+                            }
+
                             // todo: check array as list
                             relativeArray = nestedArray;
                         } else {
